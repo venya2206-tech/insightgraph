@@ -10,6 +10,7 @@ from app.api.v1.health import router as health_router
 from app.api.v1.ingestion import router as ingestion_router
 from app.api.v1.nlp import router as nlp_router
 from app.api.v1.research import router as research_router
+from app.api.v1.knowledge_graph import router as kg_router
 
 settings = get_settings()
 
@@ -45,6 +46,7 @@ app.include_router(health_router, prefix='/api/v1')
 app.include_router(ingestion_router, prefix='/api/v1')
 app.include_router(nlp_router, prefix='/api/v1')
 app.include_router(research_router, prefix='/api/v1')
+app.include_router(kg_router, prefix='/api/v1')
 
 
 @app.get('/')

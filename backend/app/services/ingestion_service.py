@@ -7,12 +7,14 @@ from app.models.claim import Claim
 from app.schemas.source import SourceCreate
 from app.services.chunker import semantic_chunk
 from app.services.nlp_service import NLPService
+from app.services.knowledge_graph_service import KnowledgeGraphService
 
 
 class IngestionService:
     def __init__(self, db: AsyncSession):
         self.db = db
         self.nlp = NLPService()
+        self.kg = KnowledgeGraphService()
 
     async def ingest_source(self, research_id: UUID, source: SourceCreate) -> Source:
         db_source = Source(
@@ -34,6 +36,12 @@ class IngestionService:
         self.db.add(db_source)
         await self.db.commit()
         await self.db.refresh(db_source)
+
+        await self.kg.add_source(
+            source_id=str(db_source.id),
+            title=db_source.title or 'Untitled',
+            source_type=db_source.source_type
+        )
 
         if db_source.raw_text:
             chunks = semantic_chunk(db_source.raw_text)
@@ -58,6 +66,13 @@ class IngestionService:
                     )
                     self.db.add(entity)
 
+                    await self.kg.add_entity(
+                        name=ent_data['name'],
+                        entity_type=ent_data['entity_type'],
+                        chunk_id=str(chunk.id),
+                        source_id=str(db_source.id)
+                    )
+
                 for claim_data in nlp_results['claims']:
                     claim = Claim(
                         chunk_id=chunk.id,
@@ -66,6 +81,12 @@ class IngestionService:
                         confidence=claim_data['confidence']
                     )
                     self.db.add(claim)
+
+                    await self.kg.add_claim(
+                        claim_text=claim_data['claim_text'],
+                        claim_type=claim_data['claim_type'],
+                        source_id=str(db_source.id)
+                    )
 
             await self.db.commit()
 
