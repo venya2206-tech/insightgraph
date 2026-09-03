@@ -9,6 +9,7 @@ from app.api.v1.ingestion import router as ingestion_router
 from app.api.v1.nlp import router as nlp_router
 from app.api.v1.knowledge_graph import router as kg_router
 from app.api.v1.analysis import router as analysis_router
+from app.api.v1.reports import router as reports_router
 
 
 @asynccontextmanager
@@ -39,6 +40,7 @@ app.include_router(ingestion_router)
 app.include_router(nlp_router)
 app.include_router(kg_router)
 app.include_router(analysis_router)
+app.include_router(reports_router)
 
 
 @app.get("/")
