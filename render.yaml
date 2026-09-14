@@ -1,0 +1,35 @@
+services:
+  # Backend API
+  - type: web
+    name: insightgraph-backend
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: NEO4J_URI
+        sync: false
+      - key: NEO4J_USER
+        sync: false
+      - key: NEO4J_PASSWORD
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+    healthCheckPath: /health
+    autoDeploy: true
+
+  # Frontend
+  - type: web
+    name: insightgraph-frontend
+    runtime: docker
+    dockerfilePath: ./frontend/Dockerfile
+    dockerContext: ./frontend
+    envVars:
+      - key: NEXT_PUBLIC_API_URL
+        sync: false
+    autoDeploy: true
