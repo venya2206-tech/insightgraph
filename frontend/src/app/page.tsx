@@ -21,7 +21,6 @@ export default function Dashboard() {
         api.getProjects(),
         api.getOverview(),
       ]);
-      // Safety check: ensure projectsData is always an array
       setProjects(Array.isArray(projectsData) ? projectsData : []);
       setOverview(overviewData);
     } catch (error) {
@@ -62,12 +61,32 @@ export default function Dashboard() {
             <h1 className="text-4xl font-bold">🔍 InsightGraph</h1>
             <p className="text-gray-400 mt-2">AI-Powered Research Platform</p>
           </div>
-          <button
-            onClick={() => setShowNewProject(true)}
-            className="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-semibold"
-          >
-            + New Research
-          </button>
+          <div className="flex gap-4">
+            <button
+              onClick={() => setShowNewProject(true)}
+              className="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-semibold"
+            >
+              + New Research
+            </button>
+            <a
+              href="/add-source"
+              className="bg-green-600 hover:bg-green-700 px-6 py-3 rounded-lg font-semibold"
+            >
+              Add Source
+            </a>
+            <a
+              href="/knowledge-graph"
+              className="bg-purple-600 hover:bg-purple-700 px-6 py-3 rounded-lg font-semibold"
+            >
+              Knowledge Graph
+            </a>
+            <a
+              href="/reports"
+              className="bg-yellow-600 hover:bg-yellow-700 px-6 py-3 rounded-lg font-semibold"
+            >
+              Reports
+            </a>
+          </div>
         </div>
 
         {/* Stats */}

@@ -21,11 +21,18 @@ class ReportService:
 
         type_summary = ", ".join([f"{k}: {v}" for k, v in entity_types.items()])
 
+        source_count = 0
+        if overview.get("total_nodes"):
+            for n in overview["total_nodes"]:
+                if "Source" in str(n.get("label", [])):
+                    source_count = n.get("count", 0)
+                    break
+
         prompt = f"""Write a professional research report based on the following data:
 
 Entities Found: {entity_list}
 Entity Categories: {type_summary}
-Total Sources Analyzed: {[n for n in overview.get("total_nodes", []) if "Source" in str(n.get("label", []))][0].get("count", 0) if overview.get("total_nodes") else 0}
+Total Sources Analyzed: {source_count}
 
 Please write:
 1. Executive Summary (2-3 sentences)
@@ -35,7 +42,10 @@ Please write:
 
 Format it as a clean markdown report."""
 
+        print("Report prompt:", prompt)
         report_content = await self.llm.generate(prompt)
+        print("Report content length:", len(report_content) if report_content else 0)
+        print("Report content preview:", report_content[:200] if report_content else "None")
 
         return {
             "report": report_content,
