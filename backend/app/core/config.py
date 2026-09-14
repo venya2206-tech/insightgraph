@@ -1,4 +1,4 @@
-﻿from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings
 from functools import lru_cache
 
 class Settings(BaseSettings):
@@ -8,10 +8,9 @@ class Settings(BaseSettings):
     NEO4J_USER: str = "neo4j"
     NEO4J_PASSWORD: str = "insightgraph"
     REDIS_URL: str = "redis://localhost:6379/0"
+    GROQ_API_KEY: str = ""
     ANTHROPIC_API_KEY: str = ""
     OPENAI_API_KEY: str = ""
-    PINECONE_API_KEY: str = ""
-    PINECONE_INDEX: str = "insightgraph"
     APP_ENV: str = "development"
     APP_DEBUG: bool = True
     SECRET_KEY: str = "change-me-in-production"
