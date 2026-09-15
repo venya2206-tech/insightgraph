@@ -1,4 +1,4 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+const API_BASE = "https://insightgraph-1.onrender.com";
 
 export interface ResearchProject {
   id: string;
@@ -39,7 +39,6 @@ export interface Report {
 export const api = {
   async getProjects(): Promise<ResearchProject[]> {
     const res = await fetch(`${API_BASE}/research`);
-    if (!res.ok) return [];
     return res.json();
   },
 
@@ -63,13 +62,11 @@ export const api = {
 
   async getOverview(): Promise<GraphOverview> {
     const res = await fetch(`${API_BASE}/api/v1/analysis/overview`);
-    if (!res.ok) return { total_nodes: [], total_relationships: [], top_entities: [] };
     return res.json();
   },
 
   async getEntityFrequency(limit: number = 20): Promise<Entity[]> {
     const res = await fetch(`${API_BASE}/api/v1/analysis/entities/frequency?limit=${limit}`);
-    if (!res.ok) return [];
     return res.json();
   },
 
@@ -77,7 +74,7 @@ export const api = {
     const res = await fetch(`${API_BASE}/api/v1/reports/generate`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: "{}",
+      body: JSON.stringify({}),
     });
     return res.json();
   },
